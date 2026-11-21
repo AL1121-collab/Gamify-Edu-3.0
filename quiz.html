@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz - Gamify Edu</title>
+  <link rel="stylesheet" href="css/style.css?v=9">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="quiz-page" style="align-items: flex-start;">
+  
+  <!-- Botão do Tema -->
+  <button class="theme-toggle" onclick="toggleTheme()" style="position:absolute; top:20px; right:20px; z-index:100;">
+    <span class="theme-icon">🌙</span>
+  </button>
+
+  <div class="quiz-container" style="margin-top: 40px; margin-bottom: 40px;">
+    <div class="quiz-header" style="margin-bottom: 24px;">
+      <a href="student.html" class="btn btn-outline btn-sm">Voltar</a>
+      <div class="quiz-progress-info">
+        <span id="quiz-title-display"></span>
+      </div>
+    </div>
+
+    <!-- Cronômetro -->
+    <div id="quiz-timer" style="display:none;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;background:var(--primary-light);color:var(--primary);font-weight:600;font-size:14px;margin-bottom:20px;transition:all 0.3s;">
+      <span class="timer-value">00:00</span>
+    </div>
+
+    <!-- Formulário com todas as perguntas -->
+    <form id="quiz-form" onsubmit="submitQuiz(event)">
+      <div id="quiz-questions-container"></div>
+      
+      <div style="margin-top: 30px; text-align: right; border-top: 1px solid var(--border); padding-top: 20px;">
+        <button type="submit" class="btn btn-primary btn-lg" id="btn-submit">Enviar Respostas</button>
+      </div>
+    </form>
+
+    <!-- Tela de Resultado -->
+    <div id="quiz-result" class="quiz-result hidden">
+      <h1 id="result-title">Concluído</h1>
+      <p id="result-message"></p>
+      
+      <div class="result-stats">
+        <div class="result-stat">
+          <strong id="result-score-value">0/0</strong>
+          <span>acertos</span>
+        </div>
+        <div class="result-stat result-stat-highlight">
+          <strong>+<span id="result-points">0</span></strong>
+          <span>pontos</span>
+        </div>
+      </div>
+
+      <!-- NOVO: Container do Gabarito -->
+      <div id="quiz-revision" style="display: none; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; text-align: left;"></div>
+
+      <a href="student.html" class="btn btn-primary" style="margin-top: 20px;">Voltar ao painel</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

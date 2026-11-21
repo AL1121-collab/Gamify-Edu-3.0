@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Aluno - Gamify Edu</title>
+  <link rel="stylesheet" href="css/style.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="app-page">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">Gamify<span>Edu</span></div>
+    <nav class="side-nav">
+      <a href="#" class="side-link active" data-view="dashboard">Dashboard</a>
+      <a href="#" class="side-link" data-view="rooms">Minhas Salas</a>
+      <a href="#" class="side-link" data-view="activities">Atividades</a>
+      <a href="#" class="side-link" data-view="chat">Chat</a>
+      <a href="#" class="side-link" data-view="ranking">Ranking</a>
+      <a href="#" class="side-link" data-view="badges">Conquistas</a>
+      <a href="#" class="side-link" data-view="profile">Meu Perfil</a>
+    </nav>
+    <button class="btn btn-outline logout-btn" onclick="logout()">Sair</button>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">≡</button>
+      <div class="topbar-titles">
+        <h1 id="view-title">Dashboard</h1>
+        <span id="active-room-title" class="active-room-title">Selecione uma sala</span>
+      </div>
+      <div class="user-info">
+        <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon">🌙</span></button>
+        <div class="user-points"><span id="user-points">0</span> pts</div>
+        <div class="user-avatar" id="user-avatar">A</div>
+      </div>
+    </header>
+
+    <section class="view active" id="view-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div><strong id="stat-points">0</strong><span>Pontos</span></div></div>
+        <div class="stat-card"><div><strong id="stat-activities">0</strong><span>Atividades</span></div></div>
+        <div class="stat-card"><div><strong id="stat-rank">-</strong><span>Posição</span></div></div>
+        <div class="stat-card"><div><strong id="stat-accuracy">0%</strong><span>Acerto</span></div></div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="card">
+          <h3>Próximas Atividades</h3>
+          <div id="next-activities" class="activity-list"></div>
+        </div>
+        <div class="card">
+          <h3>Top 5</h3>
+          <div id="mini-ranking" class="mini-ranking"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rooms">
+      <div class="card">
+        <h3>Entrar em uma Sala</h3>
+        <div class="join-room">
+          <input type="text" id="room-code-input" placeholder="Código da sala" maxlength="6">
+          <button class="btn btn-primary" onclick="joinRoom()">Entrar</button>
+        </div>
+        <div class="form-error" id="room-error"></div>
+      </div>
+      <div class="card">
+        <h3>Minhas Salas</h3>
+        <div id="rooms-list" class="rooms-grid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-activities">
+      <div class="card">
+        <h3>Atividades Disponíveis</h3>
+        <div id="activities-list" class="activity-list"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-chat">
+      <div class="card chat-card">
+        <div class="chat-head">
+          <h3>Chat</h3>
+          <select id="chat-room-select"></select>
+        </div>
+        <h4 id="chat-room-name" class="chat-room-name"></h4>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form onsubmit="sendChatMessage(event)" class="chat-form">
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="500">
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- RANKING ATUALIZADO COM SELETOR DE SALA -->
+    <section class="view" id="view-ranking">
+      <div class="card">
+        <div class="card-header">
+          <h3>Ranking por Pontos</h3>
+          <select id="ranking-room-select"></select>
+        </div>
+        <div id="ranking-chart"></div>
+      </div>
+      <div class="card">
+        <h3>Ranking por Acertos</h3>
+        <div id="ranking-correct"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-badges">
+      <div class="card">
+        <h3>Conquistas</h3>
+        <div id="badges-list" class="badges-grid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-profile">
+      <div class="card">
+        <div class="profile-header">
+          <div id="profile-avatar" class="profile-avatar-box"></div>
+          <div class="profile-info">
+            <h2 id="profile-name">-</h2>
+            <p><strong id="profile-points">0</strong> pontos</p>
+            <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+              Trocar foto
+              <input type="file" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Feedback do Professor</h3>
+        <div id="profile-feedback"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/student.js"></script>
+</body>
+</html>

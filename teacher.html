@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Professor - Gamify Edu</title>
+  <link rel="stylesheet" href="css/style.css?v=8">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="app-page">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">Gamify<span>Edu</span></div>
+    <nav class="side-nav">
+      <a href="#" class="side-link active" data-view="dashboard">Dashboard</a>
+      <a href="#" class="side-link" data-view="rooms">Minhas Salas</a>
+      <a href="#" class="side-link" data-view="quizzes">Atividades</a>
+      <a href="#" class="side-link" data-view="students">Alunos</a>
+      <a href="#" class="side-link" data-view="chat">Chat</a>
+      <a href="#" class="side-link" data-view="ranking">Ranking</a>
+      <a href="#" class="side-link" data-view="reports">Relatórios</a>
+      <a href="#" class="side-link" data-view="profile">Meu Perfil</a>
+    </nav>
+    <button class="btn btn-outline logout-btn" onclick="logout()">Sair</button>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">≡</button>
+      <h1 id="view-title">Dashboard</h1>
+      <div class="user-info">
+        <button class="theme-toggle" onclick="toggleTheme()"><span class="theme-icon">🌙</span></button>
+        <div class="user-avatar" id="user-avatar">P</div>
+      </div>
+    </header>
+
+    <section class="view active" id="view-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card"><div><strong id="stat-rooms">0</strong><span>Salas</span></div></div>
+        <div class="stat-card"><div><strong id="stat-students">0</strong><span>Alunos</span></div></div>
+        <div class="stat-card"><div><strong id="stat-quizzes">0</strong><span>Atividades</span></div></div>
+        <div class="stat-card"><div><strong id="stat-submissions">0</strong><span>Respostas</span></div></div>
+      </div>
+      <div class="card">
+        <h3>Respostas Recentes</h3>
+        <div id="recent-submissions" class="recent-submissions"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rooms">
+      <div class="card">
+        <div class="card-header">
+          <h3>Minhas Salas</h3>
+          <button class="btn btn-primary btn-sm" onclick="openRoomModal()">Nova Sala</button>
+        </div>
+        <div id="teacher-rooms-list" class="rooms-grid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-quizzes">
+      <div class="card">
+        <div class="card-header">
+          <h3>Minhas Atividades</h3>
+          <button class="btn btn-primary btn-sm" onclick="openQuizModal()">Nova Atividade</button>
+        </div>
+        <div id="teacher-quizzes-list" class="activity-list"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-students">
+      <div class="card">
+        <h3>Alunos</h3>
+        <div id="teacher-students-list"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-chat">
+      <div class="card chat-card">
+        <div class="chat-head">
+          <h3>Chat</h3>
+          <select id="chat-room-select"></select>
+        </div>
+        <h4 id="chat-room-name" class="chat-room-name"></h4>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form onsubmit="sendChatMessage(event)" class="chat-form">
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="500">
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" id="view-ranking">
+      <div class="card">
+        <div class="card-header">
+          <h3>Ranking por Pontos</h3>
+          <select id="teacher-ranking-room-select"></select>
+        </div>
+        <div id="teacher-ranking-points"></div>
+      </div>
+      <div class="card">
+        <h3>Ranking por Acertos</h3>
+        <div id="teacher-ranking-correct"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-reports">
+      <div class="card">
+        <div class="card-header">
+          <h3>Alunos com mais acertos</h3>
+          <select id="pie-room-select"></select>
+        </div>
+        <div id="pie-chart-container"></div>
+      </div>
+
+      <div class="card">
+        <h3>Respostas pendentes</h3>
+        <p class="muted small" style="margin-bottom:16px;">Corrija as respostas escritas. Os pontos são somados automaticamente.</p>
+        <div id="pending-reviews"></div>
+      </div>
+
+      <div class="card">
+        <h3>Relatório por atividade</h3>
+        <div id="reports-content"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-profile">
+      <div class="card">
+        <div class="profile-header">
+          <div id="teacher-profile-avatar" class="profile-avatar-box"></div>
+          <div class="profile-info">
+            <h2 id="teacher-profile-name">-</h2>
+            <label class="btn btn-outline btn-sm" style="cursor:pointer;">
+              Trocar foto
+              <input type="file" accept="image/*" style="display:none;" onchange="handleTeacherAvatarUpload(event)">
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="room-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Criar Nova Sala</h2>
+        <button class="modal-close" onclick="closeModal('room-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nome da Sala</label>
+          <input type="text" id="room-name" placeholder="Ex: Turma A - Matemática">
+        </div>
+        <div class="form-group">
+          <label>Descrição (opcional)</label>
+          <textarea id="room-desc" placeholder="Descrição"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="createRoom()">Criar Sala</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="quiz-modal">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h2>Criar Atividade</h2>
+        <button class="modal-close" onclick="closeModal('quiz-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" id="quiz-title" placeholder="Ex: Quiz de Frações">
+        </div>
+        <div class="form-group">
+          <label>Sala</label>
+          <select id="quiz-room"></select>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Pontos por acerto</label>
+            <input type="number" id="quiz-points" value="10" min="1">
+          </div>
+          <div class="form-group">
+            <label>Tempo limite (min)</label>
+            <input type="number" id="quiz-time" placeholder="Sem limite" min="1" max="180">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Data de Entrega (opcional)</label>
+          <input type="datetime-local" id="quiz-due-date">
+        </div>
+
+        <!-- NOVO: CHECKBOX PARA MOSTRAR GABARITO -->
+        <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+          <input type="checkbox" id="quiz-show-results" checked style="width: 18px; height: 18px; cursor: pointer;">
+          <label for="quiz-show-results" style="margin: 0; cursor: pointer; font-size: 14px;">Mostrar gabarito ao aluno após responder</label>
+        </div>
+
+        <h3 style="margin-top:20px;">Perguntas</h3>
+        <div id="questions-container"></div>
+        <button class="btn btn-outline btn-sm" onclick="addQuestion()" style="margin-top:10px;">Adicionar Pergunta</button>
+
+        <button class="btn btn-primary btn-block" onclick="createQuiz()" style="margin-top:20px;">Publicar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/teacher.js"></script>
+</body>
+</html>
